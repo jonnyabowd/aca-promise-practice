@@ -1,7 +1,14 @@
 import React, { Component, Fragment } from 'react'
 import { Button } from '@material-ui/core'
+import { connect } from 'react-redux'
+import { getUsersFromAPI } from './actions'
 
 class Users extends Component {
+
+  getUsers = () => {
+      this.props.getUsers()
+  }
+
   render() {
     return (
       <Fragment>
@@ -11,10 +18,27 @@ class Users extends Component {
         </div>
         <div className="users-block">
           {/* Map through users here */}
+          {
+            this.props.users.map(user => (
+              <p>{user.name}</p>
+            ))
+          }
         </div>
       </Fragment>
     )
   }
 }
 
-export default Users
+const mapStateToProps = (state) => {
+  return {
+    users: state.users
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUsers: () => dispatch(getUsersFromAPI())
+  }
+}
+
+export default connect (mapStateToProps, mapDispatchToProps) (Users)
